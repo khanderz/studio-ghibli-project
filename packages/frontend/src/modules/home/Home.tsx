@@ -1,56 +1,102 @@
-import { useQuery, useLazyQuery } from '@apollo/client';
-import { Box, Typography, CircularProgress } from '@mui/material';
-import { GET_HELLO_WORLD, GET_FILM } from '~/graphql/queries';
-import type { GetFilmQueryVariables } from '~/graphql/gen/graphql';
+import { useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { Box, Container, Grid } from '@mui/material';
+import { FilmButton } from './components/FilmButton';
+import { FilmCard } from './components/FilmCard';
+import { GET_FILM } from '~/graphql/queries';
+import type { Film, GetFilmQuery } from '~/graphql/gen/graphql';
+
+interface FilmInfo {
+  id: string;
+  name: string;
+}
+
+const FILMS: FilmInfo[] = [
+  { id: 'ebbb6b7c-945c-41ee-a792-de0e43191bd8', name: 'Porco Rosso' },
+  {
+    id: 'ea660b10-85c4-4ae3-8a5f-41cea3648e3e',
+    name: "Kiki's Delivery Service",
+  },
+  { id: 'cd3d059c-09f4-4ff3-8d63-bc765a5184fa', name: "Howl's Moving Castle" },
+  { id: '58611129-2dbc-4a81-a72f-77ddfc1b1b49', name: 'My Neighbor Totoro' },
+];
 
 const Home = () => {
-  const { data, loading, error } = useQuery(GET_HELLO_WORLD);
+  const [loadingFilmId, setLoadingFilmId] = useState<string | null>(null);
+  const [loadedFilms, setLoadedFilms] = useState<Record<string, Film>>({});
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
-  // Temporary test of GET_FILM query - can be removed later
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [getFilm, { data: filmData, loading: filmLoading, error: filmError }] =
-    useLazyQuery(GET_FILM);
+  const [getFilm] = useLazyQuery<GetFilmQuery>(GET_FILM, {
+    onCompleted: (data) => {
+      if (data.film) {
+        setLoadedFilms((prev) => ({
+          ...prev,
+          [data.film!.id]: data.film!,
+        }));
+        setLoadingFilmId(null);
+      }
+    },
+    onError: () => {
+      setLoadingFilmId(null);
+      // Error handling will be improved in task 5.5
+    },
+  });
 
-  // Test query with a valid film ID (My Neighbor Totoro)
-  // Uncomment to test: getFilm({ variables: { filmId: '58611129-2dbc-4a81-a72f-77ddfc1b1b49' } });
+  const handleFilmClick = (filmId: string) => {
+    // If film is already loaded, don't fetch again
+    if (loadedFilms[filmId]) {
+      return;
+    }
 
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="200px"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+    setLoadingFilmId(filmId);
+    getFilm({ variables: { filmId } });
+  };
 
-  if (error) {
-    return (
-      <Box padding="16px">
-        <Typography color="error">Error: {error.message}</Typography>
-      </Box>
-    );
-  }
+  const handleCardFlip = (filmId: string) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [filmId]: !prev[filmId],
+    }));
+  };
 
   return (
-    <Box
-      padding="16px"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="200px"
-    >
-      <Typography variant="h2" component="h1" gutterBottom>
-        {data?.helloWorld?.message || 'Hello World'}
-      </Typography>
-      <Typography variant="body1" color="textSecondary">
-        This message is fetched from the GraphQL backend!
-      </Typography>
-    </Box>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          maxWidth: '1200px',
+          margin: '0 auto',
+        }}
+      >
+        <Grid container spacing={3}>
+          {FILMS.map((film) => {
+            const loadedFilm = loadedFilms[film.id];
+            const isFlipped = flippedCards[film.id] || false;
+
+            return (
+              <Grid item xs={12} sm={6} key={film.id}>
+                {loadedFilm ? (
+                  <FilmCard
+                    film={loadedFilm}
+                    isFlipped={isFlipped}
+                    onFlip={() => handleCardFlip(film.id)}
+                  />
+                ) : (
+                  <FilmButton
+                    filmName={film.name}
+                    onClick={() => handleFilmClick(film.id)}
+                    isLoading={loadingFilmId === film.id}
+                    disabled={loadingFilmId !== null}
+                  />
+                )}
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

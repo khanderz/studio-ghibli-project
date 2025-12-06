@@ -53,7 +53,7 @@
   - [x] 3.4 Verify generated types are available in `packages/frontend/src/graphql/gen/` and can be imported
   - [x] 3.5 Test the query works by temporarily using it in Home component (can be removed later)
 
-- [ ] 4.0 Frontend: Film Button and Card UI Components
+- [x] 4.0 Frontend: Film Button and Card UI Components
 
   - [x] 4.1 Create `FilmButton` component in `packages/frontend/src/modules/home/components/FilmButton.tsx` that displays film name and handles click events
   - [x] 4.2 Style FilmButton using styled-components or MUI, ensuring it's visually distinct and clearly clickable
@@ -62,8 +62,8 @@
   - [x] 4.5 Create `FilmCardBack` component that displays: banner, description, director, release date, runtime, and Rotten Tomatoes score
   - [x] 4.6 Integrate FilmCardFront and FilmCardBack into FilmCard component
   - [x] 4.7 Style cards using styled-components/MUI following the theme, ensuring modern and polished appearance
-  - [ ] 4.8 Update `Home.tsx` to display four FilmButton components for the specified films on initial load
-  - [ ] 4.9 Implement logic to replace buttons with FilmCard components when film data is loaded
+  - [x] 4.8 Update `Home.tsx` to display four FilmButton components for the specified films on initial load
+  - [x] 4.9 Implement logic to replace buttons with FilmCard components when film data is loaded
 
 - [ ] 5.0 Frontend: Interactive Features, States, and Polish (Loading, Errors, Animations, Responsive, Accessibility)
   - [ ] 5.1 Create `useFilmData` custom hook that manages film data fetching, loading states, and caching with expiration
