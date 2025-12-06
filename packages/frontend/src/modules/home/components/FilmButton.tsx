@@ -18,6 +18,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
   '&:disabled': {
     opacity: 0.6,
   },
+  '&:focus-visible': {
+    outline: 'none',
+    boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
+  },
 }));
 
 export const FilmButton = ({
@@ -32,6 +36,10 @@ export const FilmButton = ({
       onClick={onClick}
       disabled={disabled || isLoading}
       fullWidth
+      aria-busy={isLoading}
+      aria-label={
+        isLoading ? `Loading ${filmName}...` : `View ${filmName} details`
+      }
     >
       {isLoading ? <CircularProgress size={24} color="inherit" /> : filmName}
     </StyledButton>
