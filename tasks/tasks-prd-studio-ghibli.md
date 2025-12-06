@@ -57,11 +57,11 @@
 
   - [x] 4.1 Create `FilmButton` component in `packages/frontend/src/modules/home/components/FilmButton.tsx` that displays film name and handles click events
   - [x] 4.2 Style FilmButton using styled-components or MUI, ensuring it's visually distinct and clearly clickable
-  - [ ] 4.3 Create `FilmCard` component in `packages/frontend/src/modules/home/components/FilmCard.tsx` as the main card container
-  - [ ] 4.4 Create `FilmCardFront` component that displays movie image and title
-  - [ ] 4.5 Create `FilmCardBack` component that displays: banner, description, director, release date, runtime, and Rotten Tomatoes score
-  - [ ] 4.6 Integrate FilmCardFront and FilmCardBack into FilmCard component
-  - [ ] 4.7 Style cards using styled-components/MUI following the theme, ensuring modern and polished appearance
+  - [x] 4.3 Create `FilmCard` component in `packages/frontend/src/modules/home/components/FilmCard.tsx` as the main card container
+  - [x] 4.4 Create `FilmCardFront` component that displays movie image and title
+  - [x] 4.5 Create `FilmCardBack` component that displays: banner, description, director, release date, runtime, and Rotten Tomatoes score
+  - [x] 4.6 Integrate FilmCardFront and FilmCardBack into FilmCard component
+  - [x] 4.7 Style cards using styled-components/MUI following the theme, ensuring modern and polished appearance
   - [ ] 4.8 Update `Home.tsx` to display four FilmButton components for the specified films on initial load
   - [ ] 4.9 Implement logic to replace buttons with FilmCard components when film data is loaded
 
