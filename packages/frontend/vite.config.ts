@@ -4,7 +4,11 @@ import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      fastRefresh: true,
+    }),
+  ],
   resolve: {
     alias: {
       '~': `${process.cwd()}/src`,
@@ -12,6 +16,10 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
   },
   test: {
     css: false,

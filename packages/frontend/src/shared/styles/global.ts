@@ -6,6 +6,7 @@ export const globalStyles = css`
   html,
   #root {
     height: 100%;
+    display: flex;
     margin: 0;
     padding: 0;
     background-color: ${theme.palette.common.white};

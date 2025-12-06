@@ -54,7 +54,9 @@ export const useFilmData = (): UseFilmDataReturn => {
 
   const isCacheValid = useCallback((filmId: string): boolean => {
     const cached = cacheRef.current[filmId];
-    if (!cached) return false;
+    if (!cached) {
+      return false;
+    }
     const isExpired = Date.now() - cached.timestamp > CACHE_EXPIRATION_MS;
     return !isExpired;
   }, []);

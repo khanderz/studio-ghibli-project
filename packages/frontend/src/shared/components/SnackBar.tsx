@@ -1,6 +1,7 @@
-import { Snackbar, Alert, AlertColor } from '@mui/material';
+import { Snackbar as MuiSnackBar, Alert, AlertColor } from '@mui/material';
+import type { SnackBarProps as MuiSnackbarProps } from '@mui/material/Snackbar';
 
-interface AppSnackbarProps {
+interface SnackbarProps extends MuiSnackbarProps {
   open: boolean;
   message: string | null;
   severity?: AlertColor;
@@ -8,19 +9,19 @@ interface AppSnackbarProps {
   autoHideDuration?: number;
 }
 
-export const AppSnackbar = ({
+export const SnackBar = ({
   open,
   message,
   severity = 'info',
   onClose,
   autoHideDuration = 4000,
-}: AppSnackbarProps) => {
+}: SnackbarProps) => {
   if (!message) {
     return null;
   }
 
   return (
-    <Snackbar
+    <MuiSnackBar
       open={open}
       onClose={onClose}
       autoHideDuration={autoHideDuration}
@@ -29,6 +30,6 @@ export const AppSnackbar = ({
       <Alert severity={severity} onClose={onClose} sx={{ width: '100%' }}>
         {message}
       </Alert>
-    </Snackbar>
+    </MuiSnackBar>
   );
 };

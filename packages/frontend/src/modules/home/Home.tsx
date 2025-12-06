@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Container, Grid } from '@mui/material';
 import { SnackBar } from '../../shared/components/SnackBar';
 import { FilmButton, FilmCard } from './components';
@@ -92,7 +93,16 @@ const Home = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 4,
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -103,17 +113,11 @@ const Home = () => {
         }}
       >
         <Grid container spacing={3}>
-          {FILMS.map((film) => {
-            return (
-              <Grid item xs={12} sm={6} key={film.id}>
-                {FILMS.map((film) => (
-                  <Grid item xs={12} sm={6} key={film.id}>
-                    {renderFilmTile(film)}
-                  </Grid>
-                ))}
-              </Grid>
-            );
-          })}
+          {FILMS.map((film) => (
+            <Grid item xs={12} sm={6} key={film.id}>
+              {renderFilmTile(film)}
+            </Grid>
+          ))}
         </Grid>
       </Box>
 
