@@ -29,12 +29,12 @@
 
 ## Tasks
 
-- [ ] 1.0 Backend: GraphQL Schema and Object Types for Film Data
+- [x] 1.0 Backend: GraphQL Schema and Object Types for Film Data
 
   - [x] 1.1 Create `Film` object type in `objectTypes.ghibliSchema.ts` with all required fields: `id`, `title`, `image`, `banner`, `description`, `director`, `releaseDate`, `runningTime`, `rtScore`
   - [x] 1.2 Ensure all fields are properly typed (String, Int, etc.) and handle nullability appropriately based on Studio Ghibli API response
   - [x] 1.3 Export the Film type from the ghibli schema module
-  - [ ] 1.4 Verify the schema generates correctly by running the backend dev server and checking `schema.graphql`
+  - [x] 1.4 Verify the schema generates correctly by running the backend dev server and checking `schema.graphql`
 
 - [ ] 2.0 Backend: GraphQL Resolver and Studio Ghibli API Integration
 
