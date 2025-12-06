@@ -65,22 +65,22 @@
   - [x] 4.8 Update `Home.tsx` to display four FilmButton components for the specified films on initial load
   - [x] 4.9 Implement logic to replace buttons with FilmCard components when film data is loaded
 
-- [ ] 5.0 Frontend: Interactive Features, States, and Polish (Loading, Errors, Animations, Responsive, Accessibility)
-  - [ ] 5.1 Create `useFilmData` custom hook that manages film data fetching, loading states, and caching with expiration
-  - [ ] 5.2 Implement loading state in FilmButton: disable button and show CircularProgress spinner when clicked
-  - [ ] 5.3 Implement 3D CSS transform flip animation for FilmCard (rotateY transform) that triggers on hover (desktop) and click/tap (mobile)
-  - [ ] 5.4 Set animation duration to 400ms and ensure smooth performance (use CSS transforms, avoid layout thrashing)
-  - [ ] 5.5 Implement error handling: display error message on card when fetch fails, show MUI Snackbar toast notification with error details
-  - [ ] 5.6 Add retry functionality in error state (button or action to retry fetching)
-  - [ ] 5.7 Implement responsive design: grid layout (2x2) on desktop, single column on mobile (use MUI Grid or CSS Grid with breakpoints)
-  - [ ] 5.8 Ensure application works properly down to 320px width, test card layout and interactions
-  - [ ] 5.9 Add keyboard navigation support: buttons and cards should be focusable and activatable with keyboard (Enter/Space)
-  - [ ] 5.10 Add proper ARIA labels and roles to all interactive elements (buttons, cards)
-  - [ ] 5.11 Ensure screen reader compatibility: add descriptive aria-labels, announce loading states, announce errors
-  - [ ] 5.12 Add focus indicators that meet WCAG contrast requirements
-  - [ ] 5.13 Test touch interactions on mobile: ensure card flip works smoothly on tap, touch targets meet 44x44px minimum
-  - [ ] 5.14 Implement caching logic in useFilmData: cache fetched films in memory with expiration (suggested: 5-10 minutes), avoid refetching already-loaded films
-  - [ ] 5.15 Handle multiple button clicks: if user clicks multiple buttons, manage loading states appropriately (each button should show its own loading state)
-  - [ ] 5.16 Format Rotten Tomatoes score display (e.g., "95%" format)
-  - [ ] 5.17 Format release date and runtime for better readability
-  - [ ] 5.18 Final polish: ensure all animations are smooth, loading states are clear, error states are user-friendly, and the overall UX is polished
+- [x] 5.0 Frontend: Interactive Features, States, and Polish (Loading, Errors, Animations, Responsive, Accessibility)
+  - [x] 5.1 Create `useFilmData` custom hook that manages film data fetching, loading states, and caching with expiration
+  - [x] 5.2 Implement loading state in FilmButton: disable button and show CircularProgress spinner when clicked
+  - [x] 5.3 Implement 3D CSS transform flip animation for FilmCard (rotateY transform) that triggers on hover (desktop) and click/tap (mobile)
+  - [x] 5.4 Set animation duration to 400ms and ensure smooth performance (use CSS transforms, avoid layout thrashing)
+  - [x] 5.5 Implement error handling: display error message on card when fetch fails, show MUI Snackbar toast notification with error details
+  - [x] 5.6 Add retry functionality in error state (button or action to retry fetching)
+  - [x] 5.7 Implement responsive design: grid layout (2x2) on desktop, single column on mobile (use MUI Grid or CSS Grid with breakpoints)
+  - [x] 5.8 Ensure application works properly down to 320px width, test card layout and interactions
+  - [x] 5.9 Add keyboard navigation support: buttons and cards should be focusable and activatable with keyboard (Enter/Space)
+  - [x] 5.10 Add proper ARIA labels and roles to all interactive elements (buttons, cards)
+  - [x] 5.11 Ensure screen reader compatibility: add descriptive aria-labels, announce loading states, announce errors
+  - [x] 5.12 Add focus indicators that meet WCAG contrast requirements
+  - [x] 5.13 Test touch interactions on mobile: ensure card flip works smoothly on tap, touch targets meet 44x44px minimum
+  - [x] 5.14 Implement caching logic in useFilmData: cache fetched films in memory with expiration (suggested: 5-10 minutes), avoid refetching already-loaded films
+  - [x] 5.15 Handle multiple button clicks: if user clicks multiple buttons, manage loading states appropriately (each button should show its own loading state)
+  - [x] 5.16 Format Rotten Tomatoes score display (e.g., "95%" format)
+  - [x] 5.17 Format release date and runtime for better readability
+  - [x] 5.18 Final polish: ensure all animations are smooth, loading states are clear, error states are user-friendly, and the overall UX is polished
