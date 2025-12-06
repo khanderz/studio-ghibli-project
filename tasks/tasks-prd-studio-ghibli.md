@@ -39,9 +39,9 @@
 - [ ] 2.0 Backend: GraphQL Resolver and Studio Ghibli API Integration
 
   - [x] 2.1 Create a `film` query in `queries.ghibliSchema.ts` that accepts a `filmId` argument (non-null String)
-  - [ ] 2.2 Implement resolver function that uses HttpService to fetch film data from `https://ghibliapi.vercel.app/films/{filmId}`
-  - [ ] 2.3 Map Studio Ghibli API response fields to GraphQL Film type fields (handle field name differences like `release_date` → `releaseDate`)
-  - [ ] 2.4 Add proper error handling: catch API errors and throw GraphQL errors with appropriate error codes and messages
+  - [x] 2.2 Implement resolver function that uses HttpService to fetch film data from `https://ghibliapi.vercel.app/films/{filmId}`
+  - [x] 2.3 Map Studio Ghibli API response fields to GraphQL Film type fields (handle field name differences like `release_date` → `releaseDate`)
+  - [x] 2.4 Add proper error handling: catch API errors and throw GraphQL errors with appropriate error codes and messages
   - [ ] 2.5 Handle edge cases: invalid film IDs, network errors, malformed API responses
   - [ ] 2.6 Test the resolver by querying it through GraphQL playground or a test query
 
