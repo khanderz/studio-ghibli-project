@@ -1,5 +1,5 @@
 import { stringArg, nonNull, extendType } from 'nexus';
-import { HelloWorld } from './objectTypes.ghibliSchema';
+import { HelloWorld, Film } from './objectTypes.ghibliSchema';
 import { GraphQLError } from 'graphql';
 import { GQL_ERROR_CODES, ErrorMessages } from '~/shared/constants';
 import { getHelloWorld } from '~/shared/utils';
@@ -24,6 +24,17 @@ export const TourQueries = extendType({
             extensions: { code: GQL_ERROR_CODES.SERVER_ERROR },
           });
         }
+      },
+    });
+
+    t.field('film', {
+      type: Film,
+      args: {
+        filmId: nonNull(stringArg()),
+      },
+      resolve: async (_parent, args) => {
+        // Placeholder - will implement in next task
+        return null;
       },
     });
   },
