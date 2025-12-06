@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Snackbar, Alert } from '@mui/material';
 import { FilmButton } from './components/FilmButton';
 import { FilmCard } from './components/FilmCard';
-import { GET_FILM } from '~/graphql/queries';
-import type { Film, GetFilmQuery } from '~/graphql/gen/graphql';
+import { useFilmData } from './hooks/useFilmData';
+import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmInfo {
   id: string;
@@ -22,34 +21,21 @@ const FILMS: FilmInfo[] = [
 ];
 
 const Home = () => {
-  const [loadingFilmId, setLoadingFilmId] = useState<string | null>(null);
-  const [loadedFilms, setLoadedFilms] = useState<Record<string, Film>>({});
-  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  const {
+    loadedFilms,
+    loadingFilmId,
+    errorFilmId,
+    errorMessage,
+    fetchFilm,
+    retryFilm,
+    clearError,
+  } = useFilmData();
 
-  const [getFilm] = useLazyQuery<GetFilmQuery>(GET_FILM, {
-    onCompleted: (data) => {
-      if (data.film) {
-        setLoadedFilms((prev) => ({
-          ...prev,
-          [data.film!.id]: data.film!,
-        }));
-        setLoadingFilmId(null);
-      }
-    },
-    onError: () => {
-      setLoadingFilmId(null);
-      // Error handling will be improved in task 5.5
-    },
-  });
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   const handleFilmClick = (filmId: string) => {
-    // If film is already loaded, don't fetch again
-    if (loadedFilms[filmId]) {
-      return;
-    }
-
-    setLoadingFilmId(filmId);
-    getFilm({ variables: { filmId } });
+    fetchFilm(filmId);
   };
 
   const handleCardFlip = (filmId: string) => {
@@ -57,6 +43,20 @@ const Home = () => {
       ...prev,
       [filmId]: !prev[filmId],
     }));
+  };
+
+  const handleRetry = (filmId: string) => {
+    retryFilm(filmId);
+  };
+
+  // Show snackbar when error occurs
+  if (errorFilmId && errorMessage && !showErrorSnackbar) {
+    setShowErrorSnackbar(true);
+  }
+
+  const handleCloseSnackbar = () => {
+    setShowErrorSnackbar(false);
+    clearError();
   };
 
   return (
@@ -74,10 +74,18 @@ const Home = () => {
           {FILMS.map((film) => {
             const loadedFilm = loadedFilms[film.id];
             const isFlipped = flippedCards[film.id] || false;
+            const hasError = errorFilmId === film.id;
 
             return (
               <Grid item xs={12} sm={6} key={film.id}>
-                {loadedFilm ? (
+                {hasError ? (
+                  <FilmButton
+                    filmName={film.name}
+                    onClick={() => handleRetry(film.id)}
+                    isLoading={loadingFilmId === film.id}
+                    disabled={loadingFilmId !== null}
+                  />
+                ) : loadedFilm ? (
                   <FilmCard
                     film={loadedFilm}
                     isFlipped={isFlipped}
@@ -96,6 +104,21 @@ const Home = () => {
           })}
         </Grid>
       </Box>
+
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

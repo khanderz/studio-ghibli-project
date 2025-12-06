@@ -16,6 +16,15 @@ const CardWrapper = styled(Box)(({ theme }) => ({
   position: 'relative',
   perspective: '1000px',
   cursor: 'pointer',
+  borderRadius: '8px',
+  '&:focus': {
+    outline: 'none',
+    boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
+  },
+  '&:focus-visible': {
+    outline: 'none',
+    boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
+  },
   [theme.breakpoints.down('md')]: {
     aspectRatio: '3/4',
   },
@@ -58,7 +67,10 @@ export const FilmCard = ({
           onFlip?.();
         }
       }}
-      aria-label={`${film.title} film card. Click to flip and see details.`}
+      aria-label={`${film.title} film card. ${
+        isFlipped ? 'Showing details.' : 'Showing poster.'
+      } Press Enter or Space to flip.`}
+      aria-pressed={isFlipped}
     >
       <CardInner isFlipped={isFlipped}>
         <CardFace>
