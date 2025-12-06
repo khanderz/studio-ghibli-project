@@ -40,10 +40,21 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
-  Date: any
+  Date: Date
 }
 
 export interface NexusGenObjects {
+  Film: { // root type
+    description: string; // String!
+    director: string; // String!
+    id: string; // String!
+    image: string; // String!
+    movie_banner: string; // String!
+    release_date: NexusGenScalars['Date']; // Date!
+    rt_score: number; // Int!
+    running_time: number; // Int!
+    title: string; // String!
+  }
   HelloWorld: { // root type
     message?: string | null; // String
   }
@@ -62,6 +73,17 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Film: { // field return type
+    description: string; // String!
+    director: string; // String!
+    id: string; // String!
+    image: string; // String!
+    movie_banner: string; // String!
+    release_date: NexusGenScalars['Date']; // Date!
+    rt_score: number; // Int!
+    running_time: number; // Int!
+    title: string; // String!
+  }
   HelloWorld: { // field return type
     message: string | null; // String
   }
@@ -75,6 +97,17 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Film: { // field return type name
+    description: 'String'
+    director: 'String'
+    id: 'String'
+    image: 'String'
+    movie_banner: 'String'
+    release_date: 'Date'
+    rt_score: 'Int'
+    running_time: 'Int'
+    title: 'String'
+  }
   HelloWorld: { // field return type name
     message: 'String'
   }

@@ -14,6 +14,12 @@ export const schema = makeSchema({
       '/src/shared/types/gen/nexus-typegen/index.d.ts',
     ),
   },
+  sourceTypes: {
+    modules: [],
+    mapping: {
+      Date: 'Date',
+    },
+  },
   ...(NODE_ENV === 'development' && {
     contextType: {
       module: path.join(packageRootDir, '/src/context.ts'),
