@@ -34,19 +34,42 @@ export const TourQueries = extendType({
         filmId: nonNull(stringArg()),
       },
       resolve: async (_parent, args) => {
+        // Validate filmId before making API call
+        const filmId = args.filmId?.trim();
+        if (!filmId || filmId.length === 0) {
+          throw new GraphQLError(ErrorMessages.InvalidFilmId, {
+            extensions: {
+              code: GQL_ERROR_CODES.BAD_USER_INPUT,
+            },
+          });
+        }
+
         const httpService = new HttpService();
-        const apiUrl = `https://ghibliapi.vercel.app/films/${args.filmId}`;
+        const apiUrl = `https://ghibliapi.vercel.app/films/${filmId}`;
 
         try {
           const response = await httpService.get({
             endpoint: apiUrl,
           });
 
+          // Validate response structure
+          if (!response || !response.data) {
+            throw new GraphQLError(ErrorMessages.InvalidFilmData, {
+              extensions: { code: GQL_ERROR_CODES.BAD_USER_INPUT },
+            });
+          }
+
           const filmData = response.data;
 
-          // Validate required fields are present
+          // Validate response is an object
+          if (typeof filmData !== 'object' || Array.isArray(filmData)) {
+            throw new GraphQLError(ErrorMessages.InvalidFilmData, {
+              extensions: { code: GQL_ERROR_CODES.BAD_USER_INPUT },
+            });
+          }
+
+          // Validate required fields are present and non-empty
           if (
-            !filmData ||
             !filmData.id ||
             !filmData.title ||
             !filmData.image ||
@@ -102,14 +125,26 @@ export const TourQueries = extendType({
 
           // Handle axios errors
           if (error && typeof error === 'object' && 'response' in error) {
-            const axiosError = error as { response?: { status?: number } };
+            const axiosError = error as {
+              response?: { status?: number; data?: unknown };
+              code?: string;
+            };
             // HTTP error response (4xx, 5xx)
             if (axiosError.response?.status === 404) {
               throw new GraphQLError(ErrorMessages.FilmNotFound, {
                 extensions: {
                   code: GQL_ERROR_CODES.NOT_FOUND,
-                  filmId: args.filmId,
+                  filmId: filmId,
                 },
+              });
+            }
+            // Handle timeout errors (ECONNABORTED, ETIMEDOUT)
+            if (
+              axiosError.code === 'ECONNABORTED' ||
+              axiosError.code === 'ETIMEDOUT'
+            ) {
+              throw new GraphQLError(ErrorMessages.NetworkError, {
+                extensions: { code: GQL_ERROR_CODES.NETWORK_ERROR },
               });
             }
             // Other HTTP errors
@@ -121,8 +156,15 @@ export const TourQueries = extendType({
             });
           }
 
-          // Handle network errors (no response received)
-          if (error && typeof error === 'object' && 'request' in error) {
+          // Handle network errors (no response received, connection errors)
+          if (
+            error &&
+            typeof error === 'object' &&
+            ('request' in error ||
+              (error as { code?: string }).code === 'ENOTFOUND' ||
+              (error as { code?: string }).code === 'ECONNREFUSED' ||
+              (error as { code?: string }).code === 'ECONNRESET')
+          ) {
             throw new GraphQLError(ErrorMessages.NetworkError, {
               extensions: { code: GQL_ERROR_CODES.NETWORK_ERROR },
             });
