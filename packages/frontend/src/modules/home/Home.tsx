@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import { Box, Container, Grid, Snackbar, Alert } from '@mui/material';
-import { FilmButton } from './components/FilmButton';
-import { FilmCard } from './components/FilmCard';
+import { Box, Container, Grid } from '@mui/material';
+import { SnackBar } from '../../shared/components/SnackBar';
+import { FilmButton, FilmCard } from './components';
 import { useFilmData } from './hooks/useFilmData';
 import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmInfo {
-  id: string;
-  name: string;
+  id: Film['id'];
+  name: Film['title'];
 }
 
 const FILMS: FilmInfo[] = [
@@ -32,7 +31,7 @@ const Home = () => {
   } = useFilmData();
 
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
-  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const showErrorSnackbar = Boolean(errorFilmId && errorMessage);
 
   const handleFilmClick = (filmId: string) => {
     fetchFilm(filmId);
@@ -49,14 +48,47 @@ const Home = () => {
     retryFilm(filmId);
   };
 
-  // Show snackbar when error occurs
-  if (errorFilmId && errorMessage && !showErrorSnackbar) {
-    setShowErrorSnackbar(true);
-  }
-
   const handleCloseSnackbar = () => {
-    setShowErrorSnackbar(false);
     clearError();
+  };
+
+  const renderFilmTile = (film: FilmInfo) => {
+    const loadedFilm = loadedFilms[film.id];
+    const isFlipped = flippedCards[film.id] || false;
+    const hasError = errorFilmId === film.id;
+    const isLoading = loadingFilmId === film.id;
+    const isAnyLoading = loadingFilmId !== null;
+
+    if (hasError) {
+      return (
+        <FilmButton
+          filmName={film.name}
+          onClick={() => handleRetry(film.id)}
+          isLoading={isLoading}
+          disabled={isAnyLoading}
+          isError
+        />
+      );
+    }
+
+    if (loadedFilm) {
+      return (
+        <FilmCard
+          film={loadedFilm}
+          isFlipped={isFlipped}
+          onFlip={() => handleCardFlip(film.id)}
+        />
+      );
+    }
+
+    return (
+      <FilmButton
+        filmName={film.name}
+        onClick={() => handleFilmClick(film.id)}
+        isLoading={isLoading}
+        disabled={isAnyLoading}
+      />
+    );
   };
 
   return (
@@ -72,53 +104,26 @@ const Home = () => {
       >
         <Grid container spacing={3}>
           {FILMS.map((film) => {
-            const loadedFilm = loadedFilms[film.id];
-            const isFlipped = flippedCards[film.id] || false;
-            const hasError = errorFilmId === film.id;
-
             return (
               <Grid item xs={12} sm={6} key={film.id}>
-                {hasError ? (
-                  <FilmButton
-                    filmName={film.name}
-                    onClick={() => handleRetry(film.id)}
-                    isLoading={loadingFilmId === film.id}
-                    disabled={loadingFilmId !== null}
-                  />
-                ) : loadedFilm ? (
-                  <FilmCard
-                    film={loadedFilm}
-                    isFlipped={isFlipped}
-                    onFlip={() => handleCardFlip(film.id)}
-                  />
-                ) : (
-                  <FilmButton
-                    filmName={film.name}
-                    onClick={() => handleFilmClick(film.id)}
-                    isLoading={loadingFilmId === film.id}
-                    disabled={loadingFilmId !== null}
-                  />
-                )}
+                {FILMS.map((film) => (
+                  <Grid item xs={12} sm={6} key={film.id}>
+                    {renderFilmTile(film)}
+                  </Grid>
+                ))}
               </Grid>
             );
           })}
         </Grid>
       </Box>
 
-      <Snackbar
+      <SnackBar
         open={showErrorSnackbar}
+        message={errorMessage}
+        severity="error"
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+      />
     </Container>
   );
 };

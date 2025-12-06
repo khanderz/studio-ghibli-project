@@ -1,8 +1,9 @@
 import { Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmButtonProps {
-  filmName: string;
+  filmName: Film['title'];
   onClick: () => void;
   isLoading?: boolean;
   disabled?: boolean;

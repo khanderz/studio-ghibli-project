@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FilmCardFront } from './FilmCardFront';
-import { FilmCardBack } from './FilmCardBack';
+import { FilmCardFront, FilmCardBack } from './';
 import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmCardProps {
