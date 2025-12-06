@@ -31,6 +31,19 @@ export type Scalars = {
   Date: { input: any; output: any };
 };
 
+export type Film = {
+  __typename?: 'Film';
+  banner: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  director: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  image: Scalars['String']['output'];
+  releaseDate: Scalars['Date']['output'];
+  rtScore: Scalars['Int']['output'];
+  runningTime: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+};
+
 export type HelloWorld = {
   __typename?: 'HelloWorld';
   message?: Maybe<Scalars['String']['output']>;
@@ -43,8 +56,13 @@ export type Mutation = {
 
 export type Query = {
   __typename?: 'Query';
+  film?: Maybe<Film>;
   helloWorld: HelloWorld;
   placeholder?: Maybe<Scalars['String']['output']>;
+};
+
+export type QueryFilmArgs = {
+  filmId: Scalars['String']['input'];
 };
 
 export type GetHelloWorldQueryVariables = Exact<{ [key: string]: never }>;
@@ -52,6 +70,26 @@ export type GetHelloWorldQueryVariables = Exact<{ [key: string]: never }>;
 export type GetHelloWorldQuery = {
   __typename?: 'Query';
   helloWorld: { __typename?: 'HelloWorld'; message?: string | null };
+};
+
+export type GetFilmQueryVariables = Exact<{
+  filmId: Scalars['String']['input'];
+}>;
+
+export type GetFilmQuery = {
+  __typename?: 'Query';
+  film?: {
+    __typename?: 'Film';
+    id: string;
+    title: string;
+    image: string;
+    banner: string;
+    description: string;
+    director: string;
+    releaseDate: any;
+    runningTime: number;
+    rtScore: number;
+  } | null;
 };
 
 export const GetHelloWorldDocument = {
@@ -79,3 +117,62 @@ export const GetHelloWorldDocument = {
     },
   ],
 } as unknown as DocumentNode<GetHelloWorldQuery, GetHelloWorldQueryVariables>;
+export const GetFilmDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetFilm' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'filmId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'film' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'filmId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'filmId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'banner' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'director' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'releaseDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'runningTime' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'rtScore' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetFilmQuery, GetFilmQueryVariables>;

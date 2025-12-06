@@ -45,13 +45,13 @@
   - [x] 2.5 Handle edge cases: invalid film IDs, network errors, malformed API responses
   - [x] 2.6 Test the resolver by querying it through GraphQL playground or a test query
 
-- [ ] 3.0 Frontend: GraphQL Query Setup and Code Generation
+- [x] 3.0 Frontend: GraphQL Query Setup and Code Generation
 
-  - [ ] 3.1 Create `GET_FILM` query in `packages/frontend/src/graphql/queries/index.ts` that accepts `$filmId: String!` variable and queries the `film` field
-  - [ ] 3.2 Include all required Film fields in the query: `id`, `title`, `image`, `banner`, `description`, `director`, `releaseDate`, `runningTime`, `rtScore`
-  - [ ] 3.3 Run `pnpm --filter frontend codegen` to generate TypeScript types and hooks
-  - [ ] 3.4 Verify generated types are available in `packages/frontend/src/graphql/gen/` and can be imported
-  - [ ] 3.5 Test the query works by temporarily using it in Home component (can be removed later)
+  - [x] 3.1 Create `GET_FILM` query in `packages/frontend/src/graphql/queries/index.ts` that accepts `$filmId: String!` variable and queries the `film` field
+  - [x] 3.2 Include all required Film fields in the query: `id`, `title`, `image`, `banner`, `description`, `director`, `releaseDate`, `runningTime`, `rtScore`
+  - [x] 3.3 Run `pnpm --filter frontend codegen` to generate TypeScript types and hooks
+  - [x] 3.4 Verify generated types are available in `packages/frontend/src/graphql/gen/` and can be imported
+  - [x] 3.5 Test the query works by temporarily using it in Home component (can be removed later)
 
 - [ ] 4.0 Frontend: Film Button and Card UI Components
 
