@@ -36,7 +36,7 @@
   - [x] 1.3 Export the Film type from the ghibli schema module
   - [x] 1.4 Verify the schema generates correctly by running the backend dev server and checking `schema.graphql`
 
-- [ ] 2.0 Backend: GraphQL Resolver and Studio Ghibli API Integration
+- [x] 2.0 Backend: GraphQL Resolver and Studio Ghibli API Integration
 
   - [x] 2.1 Create a `film` query in `queries.ghibliSchema.ts` that accepts a `filmId` argument (non-null String)
   - [x] 2.2 Implement resolver function that uses HttpService to fetch film data from `https://ghibliapi.vercel.app/films/{filmId}`
