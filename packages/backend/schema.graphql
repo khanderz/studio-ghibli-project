@@ -6,14 +6,14 @@
 scalar Date
 
 type Film {
+  banner: String!
   description: String!
   director: String!
   id: String!
   image: String!
-  movie_banner: String!
-  release_date: Date!
-  rt_score: Int!
-  running_time: Int!
+  releaseDate: Date!
+  rtScore: Int!
+  runningTime: Int!
   title: String!
 }
 
@@ -26,6 +26,7 @@ type Mutation {
 }
 
 type Query {
+  film(filmId: String!): Film
   helloWorld: HelloWorld!
   placeholder: String
 }

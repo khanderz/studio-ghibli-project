@@ -45,14 +45,14 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Film: { // root type
+    banner: string; // String!
     description: string; // String!
     director: string; // String!
     id: string; // String!
     image: string; // String!
-    movie_banner: string; // String!
-    release_date: NexusGenScalars['Date']; // Date!
-    rt_score: number; // Int!
-    running_time: number; // Int!
+    releaseDate: NexusGenScalars['Date']; // Date!
+    rtScore: number; // Int!
+    runningTime: number; // Int!
     title: string; // String!
   }
   HelloWorld: { // root type
@@ -74,14 +74,14 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Film: { // field return type
+    banner: string; // String!
     description: string; // String!
     director: string; // String!
     id: string; // String!
     image: string; // String!
-    movie_banner: string; // String!
-    release_date: NexusGenScalars['Date']; // Date!
-    rt_score: number; // Int!
-    running_time: number; // Int!
+    releaseDate: NexusGenScalars['Date']; // Date!
+    rtScore: number; // Int!
+    runningTime: number; // Int!
     title: string; // String!
   }
   HelloWorld: { // field return type
@@ -91,6 +91,7 @@ export interface NexusGenFieldTypes {
     placeholder: string | null; // String
   }
   Query: { // field return type
+    film: NexusGenRootTypes['Film'] | null; // Film
     helloWorld: NexusGenRootTypes['HelloWorld']; // HelloWorld!
     placeholder: string | null; // String
   }
@@ -98,14 +99,14 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Film: { // field return type name
+    banner: 'String'
     description: 'String'
     director: 'String'
     id: 'String'
     image: 'String'
-    movie_banner: 'String'
-    release_date: 'Date'
-    rt_score: 'Int'
-    running_time: 'Int'
+    releaseDate: 'Date'
+    rtScore: 'Int'
+    runningTime: 'Int'
     title: 'String'
   }
   HelloWorld: { // field return type name
@@ -115,12 +116,18 @@ export interface NexusGenFieldTypeNames {
     placeholder: 'String'
   }
   Query: { // field return type name
+    film: 'Film'
     helloWorld: 'HelloWorld'
     placeholder: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
+  Query: {
+    film: { // args
+      filmId: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

@@ -13,11 +13,11 @@ export const Film = objectType({
     t.nonNull.string('id');
     t.nonNull.string('title');
     t.nonNull.string('image');
-    t.nonNull.string('movie_banner');
+    t.nonNull.string('banner');
     t.nonNull.string('description');
     t.nonNull.string('director');
-    t.nonNull.field('release_date', { type: 'Date' });
-    t.nonNull.int('running_time');
-    t.nonNull.int('rt_score');
+    t.nonNull.field('releaseDate', { type: 'Date' });
+    t.nonNull.int('runningTime');
+    t.nonNull.int('rtScore');
   },
 });
