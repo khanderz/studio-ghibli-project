@@ -1,9 +1,18 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import { Box, Typography, CircularProgress } from '@mui/material';
-import { GET_HELLO_WORLD } from '~/graphql/queries';
+import { GET_HELLO_WORLD, GET_FILM } from '~/graphql/queries';
+import type { GetFilmQueryVariables } from '~/graphql/gen/graphql';
 
 const Home = () => {
   const { data, loading, error } = useQuery(GET_HELLO_WORLD);
+
+  // Temporary test of GET_FILM query - can be removed later
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [getFilm, { data: filmData, loading: filmLoading, error: filmError }] =
+    useLazyQuery(GET_FILM);
+
+  // Test query with a valid film ID (My Neighbor Totoro)
+  // Uncomment to test: getFilm({ variables: { filmId: '58611129-2dbc-4a81-a72f-77ddfc1b1b49' } });
 
   if (loading) {
     return (
