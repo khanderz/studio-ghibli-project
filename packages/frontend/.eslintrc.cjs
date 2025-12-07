@@ -9,6 +9,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'plugin:prettier/recommended', // Make sure this is always the last entry in list
   ],
   overrides: [
@@ -35,7 +37,6 @@ module.exports = {
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
-    // 'no-console': 'error',
     curly: 'error',
     'unicorn/switch-case-braces': 'error',
     'no-nested-ternary': 'error',
@@ -44,6 +45,11 @@ module.exports = {
   settings: {
     react: {
       version: 'detect',
+    },
+    'import/resolver': {
+      typescript: {
+        project: './tsconfig.json',
+      },
     },
   },
 };
