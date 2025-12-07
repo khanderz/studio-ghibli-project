@@ -1,28 +1,18 @@
 declare module '@mui/material/styles' {
-  export interface Theme {}
-
-  export interface ThemeOptions {}
-
-  interface PaletteColor {
-    blue?: string;
+  interface CardPalette {
+    totoro: string;
+    spiritedAway: string;
+    mononoke: string;
+    howl: string;
   }
 
-  interface PaletteColorOptions {
-    blue?: string;
-    main: string;
+  interface Palette {
+    card: CardPalette;
   }
 
-  interface SimplePaletteColorOptions {
-    light?: string;
-    main: string;
-    dark?: string;
+  interface PaletteOptions {
+    card?: Partial<CardPalette>;
   }
-
-  export interface TypeBackground {}
-
-  interface TypographyVariants {}
-
-  interface TypographyVariantsOptions {}
 
   interface ZIndex {
     min: number;

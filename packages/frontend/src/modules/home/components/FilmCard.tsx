@@ -1,21 +1,24 @@
 import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme, CardColorKey } from '@mui/material/styles';
 import { FilmCardFront, FilmCardBack } from './';
 import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmCardProps {
   film: Film;
+  colorKey: CardColorKey;
   isFlipped?: boolean;
   onFlip?: () => void;
 }
 
 const CardWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
-  aspectRatio: '2/3',
+  height: 368,
   position: 'relative',
   perspective: '1000px',
   cursor: 'pointer',
-  borderRadius: '8px',
+  borderRadius: 16,
+  boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.25)',
+  border: `4px solid ${theme.palette.common.white}`,
   '&:focus': {
     outline: 'none',
     boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
@@ -23,9 +26,6 @@ const CardWrapper = styled(Box)(({ theme }) => ({
   '&:focus-visible': {
     outline: 'none',
     boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
-  },
-  [theme.breakpoints.down('md')]: {
-    aspectRatio: '3/4',
   },
 }));
 
@@ -40,21 +40,30 @@ const CardInner = styled(Box, {
   transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 }));
 
-const CardFace = styled(Box)({
+const CardFace = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'bgColor',
+})<{ bgColor: string }>(({ bgColor }) => ({
   width: '100%',
   height: '100%',
-  position: 'relative',
-  borderRadius: '8px',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  borderRadius: 16,
   overflow: 'hidden',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  backgroundColor: '#ffffff',
-});
+  backgroundColor: bgColor,
+  backfaceVisibility: 'hidden',
+}));
 
 export const FilmCard = ({
   film,
+  colorKey,
   isFlipped = false,
   onFlip,
 }: FilmCardProps) => {
+  const theme = useTheme();
+  const cardColor = theme.palette.card[colorKey];
+  console.log({ cardColor });
+
   return (
     <CardWrapper
       onClick={onFlip}
@@ -72,10 +81,10 @@ export const FilmCard = ({
       aria-pressed={isFlipped}
     >
       <CardInner isFlipped={isFlipped}>
-        <CardFace>
+        <CardFace bgColor={cardColor}>
           <FilmCardFront film={film} />
         </CardFace>
-        <CardFace>
+        <CardFace bgColor={cardColor}>
           <FilmCardBack film={film} />
         </CardFace>
       </CardInner>

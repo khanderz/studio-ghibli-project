@@ -21,6 +21,12 @@ module.exports = {
         sourceType: 'script',
       },
     },
+    {
+      files: ['src/**/*.{ts,tsx}'],
+      rules: {
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+      },
+    },
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -29,7 +35,7 @@ module.exports = {
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'no-console': 'error',
+    // 'no-console': 'error',
     curly: 'error',
     'unicorn/switch-case-braces': 'error',
     'no-nested-ternary': 'error',

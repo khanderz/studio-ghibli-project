@@ -1,4 +1,8 @@
-export const palette = {
+import type { PaletteOptions, Theme } from '@mui/material/styles';
+
+export type CardColorKey = keyof Theme['palette']['card'];
+
+export const palette: PaletteOptions = {
   common: {
     white: '#FFFFFF',
     black: '#000000',
