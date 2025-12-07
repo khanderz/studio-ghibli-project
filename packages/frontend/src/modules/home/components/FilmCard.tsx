@@ -5,7 +5,7 @@ import {
   type CardColorKey,
   type Theme,
 } from '@mui/material/styles';
-import { FilmCardFront, FilmCardBack } from './';
+import { FilmCardFront, FilmCardBack } from '.';
 import type { Film } from '~/graphql/gen/graphql';
 
 interface FilmCardProps {
