@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['@typescript-eslint', 'react', 'unicorn'],
+  plugins: ['@typescript-eslint', 'react', 'unicorn', 'import'],
   env: {
     browser: true,
     es2024: true,
@@ -41,6 +41,7 @@ module.exports = {
     'unicorn/switch-case-braces': 'error',
     'no-nested-ternary': 'error',
     radix: 'error',
+    'no-undef': 'error',
   },
   settings: {
     react: {

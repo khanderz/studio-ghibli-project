@@ -1,5 +1,10 @@
 import { Box } from '@mui/material';
-import { styled, useTheme, CardColorKey } from '@mui/material/styles';
+import {
+  styled,
+  useTheme,
+  type CardColorKey,
+  type Theme,
+} from '@mui/material/styles';
 import { FilmCardFront, FilmCardBack } from './';
 import type { Film } from '~/graphql/gen/graphql';
 
@@ -10,13 +15,15 @@ interface FilmCardProps {
   onFlip?: () => void;
 }
 
+const CARD_BORDER_RADIUS = 16;
+
 const CardWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
   height: 368,
   position: 'relative',
   perspective: '1000px',
   cursor: 'pointer',
-  borderRadius: 16,
+  borderRadius: CARD_BORDER_RADIUS,
   boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.25)',
   border: `4px solid ${theme.palette.common.white}`,
   '&:focus': {
@@ -48,11 +55,18 @@ const CardFace = styled(Box, {
   position: 'absolute',
   top: 0,
   left: 0,
-  borderRadius: 16,
+  borderRadius: CARD_BORDER_RADIUS,
   overflow: 'hidden',
   backgroundColor: bgColor,
   backfaceVisibility: 'hidden',
+  display: 'flex',
 }));
+
+const FrontFace = styled(BaseFace)({});
+
+const BackFace = styled(BaseFace)({
+  transform: 'rotateY(180deg)',
+});
 
 export const FilmCard = ({
   film,
