@@ -1,57 +1,52 @@
-import { Box } from '@mui/material';
-import {
-  styled,
-  useTheme,
-  type CardColorKey,
-  type Theme,
-} from '@mui/material/styles';
+import { KeyboardEventHandler } from 'react';
+import { Box, CircularProgress } from '@mui/material';
+import { styled, useTheme, type Theme } from '@mui/material/styles';
 import { FilmCardFront, FilmCardBack } from '.';
 import type { Film } from '~/graphql/gen/graphql';
+import type { CardColorKey } from '../../shared/styles/theme';
+import { FilmInfo } from '../../../static/films';
 
 interface FilmCardProps {
-  film: Film;
+  baseInfo: FilmInfo;
+  film: Film | null;
   colorKey: CardColorKey;
-  isFlipped?: boolean;
-  onFlip?: () => void;
+  isSelected: boolean;
+  isFlipped: boolean;
+  isLoading: boolean;
+  onFlip: () => void;
 }
 
 const CARD_BORDER_RADIUS = 16;
+const CARD_WIDTH = 290;
+const CARD_HEIGHT = 368;
 
-const CardWrapper = styled(Box)(({ theme }) => ({
-  width: '100%',
-  height: 368,
-  position: 'relative',
-  perspective: '1000px',
-  cursor: 'pointer',
+const CardWrapper = styled(Box)(({ theme }: Theme) => ({
+  width: CARD_WIDTH,
+  height: CARD_HEIGHT,
   borderRadius: CARD_BORDER_RADIUS,
-  boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.25)',
+  boxShadow: '0 4px 24px rgba(0, 0, 0, 0.25)',
   border: `4px solid ${theme.palette.common.white}`,
-  '&:focus': {
-    outline: 'none',
-    boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
-  },
-  '&:focus-visible': {
-    outline: 'none',
-    boxShadow: `0 0 0 3px ${theme.palette.primary.main}`,
-  },
+  cursor: 'pointer',
+  overflow: 'hidden',
+  position: 'relative',
 }));
 
 const CardInner = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'isFlipped',
 })<{ isFlipped: boolean }>(({ isFlipped }) => ({
-  width: '100%',
-  height: '100%',
+  width: CARD_WIDTH,
+  height: CARD_HEIGHT,
   position: 'relative',
   transformStyle: 'preserve-3d',
   transition: 'transform 0.4s ease-in-out',
   transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
 }));
 
-const CardFace = styled(Box, {
+const BaseFace = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'bgColor',
 })<{ bgColor: string }>(({ bgColor }) => ({
-  width: '100%',
-  height: '100%',
+  width: CARD_WIDTH,
+  height: CARD_HEIGHT,
   position: 'absolute',
   top: 0,
   left: 0,
@@ -59,7 +54,6 @@ const CardFace = styled(Box, {
   overflow: 'hidden',
   backgroundColor: bgColor,
   backfaceVisibility: 'hidden',
-  display: 'flex',
 }));
 
 const FrontFace = styled(BaseFace)({});
@@ -68,39 +62,155 @@ const BackFace = styled(BaseFace)({
   transform: 'rotateY(180deg)',
 });
 
+const SelectionSurface = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'banner',
+})<{ banner: string }>(({ theme, banner }) => ({
+  width: '100%',
+  height: '100%',
+  padding: theme.spacing(4),
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  transition:
+    'background-image 0.3s ease, transform 0.2s ease, background-color 0.3s ease',
+  '&:hover': {
+    backgroundImage: `url(${banner})`,
+    transform: 'translateY(-2px)',
+  },
+}));
+
+const SelectionTitle = styled('div')(({ theme }) => ({
+  ...theme.typography.h3,
+  color: theme.palette.common.white,
+}));
+
+const ContinueButtonWrapper = styled(Box)({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
+
+const ContinueButton = styled('button')(() => ({
+  width: 55,
+  height: 55,
+  padding: '26.8px 16.7px 26.2px 16px',
+  border: 'none',
+  background: 'transparent',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const ContinueEllipse = styled('div')(({ theme }) => ({
+  width: 55,
+  height: 55,
+  borderRadius: '50%',
+  border: `2px solid ${theme.palette.common.white}`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.common.white,
+}));
+
+const ContinueArrow = styled('div')(({ theme }) => ({
+  width: 22.3,
+  height: 2,
+  backgroundColor: theme.palette.common.white,
+}));
+
 export const FilmCard = ({
+  baseInfo,
   film,
   colorKey,
+  isSelected = false,
   isFlipped = false,
+  isLoading = false,
   onFlip,
 }: FilmCardProps) => {
-  const theme = useTheme();
-  const cardColor = theme.palette.card[colorKey];
-  console.log({ cardColor });
+  const theme = useTheme<Theme>();
+  const frontColor = theme.palette.card[colorKey];
+  const backColor = theme.palette.common.white;
+  const banner = film?.banner ?? '';
+  const accessibleTitle = film?.title ?? baseInfo.title;
+
+  console.log({
+    baseInfo,
+    film,
+    isSelected,
+    isFlipped,
+    isLoading,
+    frontColor,
+    backColor,
+  });
+
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onFlip();
+    }
+  };
 
   return (
     <CardWrapper
-      onClick={onFlip}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onFlip?.();
+      data-testid="filmcard-wrapper"
+      onClick={() => {
+        if (!isLoading) {
+          onFlip();
         }
       }}
-      aria-label={`${film.title} film card. ${
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label={`${accessibleTitle} film card. ${
         isFlipped ? 'Showing details.' : 'Showing poster.'
-      } Press Enter or Space to flip.`}
+      } Press Enter or Space to ${isFlipped ? 'show poster' : 'show details'}.`}
       aria-pressed={isFlipped}
+      aria-busy={isLoading}
     >
-      <CardInner isFlipped={isFlipped}>
-        <CardFace bgColor={cardColor}>
-          <FilmCardFront film={film} />
-        </CardFace>
-        <CardFace bgColor={cardColor}>
-          <FilmCardBack film={film} />
-        </CardFace>
+      <CardInner data-testid="filmcard-inner" isFlipped={isFlipped}>
+        <FrontFace data-testid="filmcard-frontface" bgColor={frontColor}>
+          {isSelected && film ? (
+            <FilmCardFront data-testid="filmcard-frontcardfront" film={film} />
+          ) : (
+            <SelectionSurface banner={banner}>
+              <SelectionTitle>{accessibleTitle}</SelectionTitle>
+              <ContinueButtonWrapper>
+                <ContinueButton
+                  type="button"
+                  aria-label={
+                    isLoading
+                      ? `Loading ${accessibleTitle}`
+                      : `Select ${accessibleTitle}`
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (!isLoading) {
+                      onFlip();
+                    }
+                  }}
+                >
+                  <ContinueEllipse>
+                    {isLoading ? (
+                      <CircularProgress size={22} color="inherit" />
+                    ) : (
+                      <ContinueArrow />
+                    )}
+                  </ContinueEllipse>
+                </ContinueButton>
+              </ContinueButtonWrapper>
+            </SelectionSurface>
+          )}
+        </FrontFace>
+
+        <BackFace data-testid="filmcard-backface" bgColor={backColor}>
+          {film && (
+            <FilmCardBack data-testid="filmcard-backcardback" film={film} />
+          )}
+        </BackFace>
       </CardInner>
     </CardWrapper>
   );

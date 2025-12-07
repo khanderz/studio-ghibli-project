@@ -1,12 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, type Theme } from '@mui/material/styles';
 import type { Film } from '~/graphql/gen/graphql';
 
-interface FilmCardFrontProps {
-  film: Film;
-}
-
-const CardContainer = styled(Box)(({ theme }) => ({
+const CardContainer = styled(Box)(({ theme }: Theme) => ({
   width: '100%',
   height: '100%',
   display: 'flex',
@@ -42,7 +38,7 @@ const TitleContainer = styled(Box)(({ theme }) => ({
   borderTop: `1px solid ${theme.palette.divider}`,
 }));
 
-export const FilmCardFront = ({ film }: FilmCardFrontProps) => {
+export const FilmCardFront = ({ film }: Film) => {
   return (
     <CardContainer>
       <ImageContainer>

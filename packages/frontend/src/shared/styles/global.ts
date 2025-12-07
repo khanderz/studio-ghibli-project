@@ -6,12 +6,16 @@ export const globalStyles = css`
   body,
   #root {
     height: 100%;
+    width: 100%;
     display: flex;
     margin: 0;
     padding: 0;
   }
 
   body {
+    height: 100%;
+    width: 100%;
+    display: flex;
     background-image: url('/Background.png');
     background-size: cover;
     background-position: center;

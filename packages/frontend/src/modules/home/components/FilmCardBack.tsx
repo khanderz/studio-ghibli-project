@@ -1,12 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, type Theme } from '@mui/material/styles';
 import type { Film } from '~/graphql/gen/graphql';
 
-interface FilmCardBackProps {
-  film: Film;
-}
-
-const CardContainer = styled(Box)(({ theme }) => ({
+const CardContainer = styled(Box)(({ theme }: Theme) => ({
   width: '100%',
   height: '100%',
   display: 'flex',
@@ -28,7 +24,6 @@ const BannerContainer = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '#f5f5f5',
 });
 
 const BannerImage = styled('img')({
@@ -73,8 +68,10 @@ const Description = styled(Typography)(({ theme }) => ({
   marginTop: theme.spacing(1),
 }));
 
-function formatDate(date: any): string {
-  if (!date) return 'N/A';
+function formatDate(date: Film['releaseDate']): Film['releaseDate'] {
+  if (!date) {
+    return 'N/A';
+  }
   if (typeof date === 'number') {
     const d = new Date(date);
     return d.getFullYear().toString();
@@ -85,17 +82,21 @@ function formatDate(date: any): string {
   return String(date);
 }
 
-function formatRuntime(minutes: number): string {
-  if (!minutes) return 'N/A';
+function formatRuntime(minutes: Film['runningTime']): Film['runningTime'] {
+  if (!minutes) {
+    return 'N/A';
+  }
   return `${minutes} min`;
 }
 
-function formatRtScore(score: number): string {
-  if (!score) return 'N/A';
+function formatRtScore(score: Film['rtScore']): Film['rtScore'] {
+  if (!score) {
+    return 'N/A';
+  }
   return `${score}%`;
 }
 
-export const FilmCardBack = ({ film }: FilmCardBackProps) => {
+export const FilmCardBack = ({ film }: Film) => {
   return (
     <CardContainer>
       <BannerContainer>

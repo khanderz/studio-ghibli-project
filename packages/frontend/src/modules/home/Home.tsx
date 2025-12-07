@@ -1,39 +1,10 @@
 import { useState } from 'react';
 import { Box, Container, Grid } from '@mui/material';
 import { SnackBar } from '../../shared/components/SnackBar';
-import { FilmButton, FilmCard } from './components';
+import { FilmCard } from './components';
 import { useFilmData } from './hooks/useFilmData';
+import { FILMS, FilmInfo } from '../../static/films';
 import type { Film } from '~/graphql/gen/graphql';
-import { CardColorKey } from '@mui/material/styles';
-
-interface FilmInfo {
-  id: Film['id'];
-  name: Film['title'];
-  cardColorKey: CardColorKey;
-}
-
-const FILMS: FilmInfo[] = [
-  {
-    id: 'ebbb6b7c-945c-41ee-a792-de0e43191bd8',
-    name: 'Porco Rosso',
-    cardColorKey: 'mononoke',
-  },
-  {
-    id: 'ea660b10-85c4-4ae3-8a5f-41cea3648e3e',
-    name: "Kiki's Delivery Service",
-    cardColorKey: 'spiritedAway',
-  },
-  {
-    id: 'cd3d059c-09f4-4ff3-8d63-bc765a5184fa',
-    name: "Howl's Moving Castle",
-    cardColorKey: 'howl',
-  },
-  {
-    id: '58611129-2dbc-4a81-a72f-77ddfc1b1b49',
-    name: 'My Neighbor Totoro',
-    cardColorKey: 'totoro',
-  },
-];
 
 const Home = () => {
   const {
@@ -47,93 +18,110 @@ const Home = () => {
   } = useFilmData();
 
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  const [selectedCards, setSelectedCards] = useState<Record<string, boolean>>(
+    {},
+  );
+
   const showErrorSnackbar = Boolean(errorFilmId && errorMessage);
 
-  const handleFilmClick = (filmId: string) => {
-    fetchFilm(filmId);
-  };
+  const handleCardFlip = (filmId: FilmInfo['id']) => {
+    const isSelected = selectedCards[filmId] || false;
+    const loadedFilm: Film | undefined = loadedFilms[filmId];
+    const isLoading = loadingFilmId === filmId;
+    const hasError = errorFilmId === filmId;
 
-  const handleCardFlip = (filmId: string) => {
+    if (hasError) {
+      retryFilm(filmId);
+      return;
+    }
+
+    if (!isSelected) {
+      setSelectedCards((prev) => ({
+        ...prev,
+        [filmId]: true,
+      }));
+
+      if (!loadedFilm && !isLoading) {
+        fetchFilm(filmId);
+      }
+      return;
+    }
+
+    if (isLoading || !loadedFilm) {
+      return;
+    }
+
     setFlippedCards((prev) => ({
       ...prev,
       [filmId]: !prev[filmId],
     }));
   };
 
-  const handleRetry = (filmId: string) => {
-    retryFilm(filmId);
-  };
-
   const handleCloseSnackbar = () => {
     clearError();
   };
 
-  const renderFilmTile = (film: FilmInfo) => {
-    const loadedFilm = loadedFilms[film.id];
-    const isFlipped = flippedCards[film.id] || false;
-    const hasError = errorFilmId === film.id;
-    const isLoading = loadingFilmId === film.id;
-    const isAnyLoading = loadingFilmId !== null;
-
-    if (hasError) {
-      return (
-        <FilmButton
-          filmName={film.name}
-          onClick={() => handleRetry(film.id)}
-          isLoading={isLoading}
-          disabled={isAnyLoading}
-          isError
-        />
-      );
-    }
-
-    if (loadedFilm) {
-      return (
-        <FilmCard
-          film={loadedFilm}
-          colorKey={film.cardColorKey}
-          isFlipped={isFlipped}
-          onFlip={() => handleCardFlip(film.id)}
-        />
-      );
-    }
-
-    return (
-      <FilmButton
-        filmName={film.name}
-        onClick={() => handleFilmClick(film.id)}
-        isLoading={isLoading}
-        disabled={isAnyLoading}
-      />
-    );
-  };
-
   return (
     <Container
-      maxWidth="lg"
+      data-testid="home-container"
+      maxWidth="xl"
       sx={{
-        py: 4,
+        p: 4,
         display: 'flex',
         height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '100%',
       }}
     >
       <Box
+        data-testid="home-box"
         sx={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'row',
           gap: 3,
-          maxWidth: '1200px',
-          margin: '0 auto',
+          height: '100%',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <Grid container spacing={3}>
-          {FILMS.map((film) => (
-            <Grid item xs={12} sm={6} key={film.id}>
-              {renderFilmTile(film)}
-            </Grid>
-          ))}
+        <Grid
+          container
+          data-testid="home-grid-container"
+          sx={{
+            display: 'flex',
+            height: '100%',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {FILMS.map((filmInfo) => {
+            const film = loadedFilms[filmInfo.id] ?? null;
+            const isFlipped = flippedCards[filmInfo.id] || false;
+            const isSelected = selectedCards[filmInfo.id] || false;
+            const isLoading = loadingFilmId === filmInfo.id;
+
+            return (
+              <Grid
+                item
+                data-testid="home-grid-item"
+                key={filmInfo.id}
+                sx={{
+                  padding: 2,
+                }}
+              >
+                <FilmCard
+                  baseInfo={filmInfo}
+                  film={film}
+                  colorKey={filmInfo.cardColorKey}
+                  isSelected={isSelected}
+                  isFlipped={isFlipped}
+                  isLoading={isLoading}
+                  onFlip={() => handleCardFlip(filmInfo.id)}
+                />
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
 
