@@ -1,7 +1,7 @@
 import { KeyboardEventHandler } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import { styled, useTheme, type Theme } from '@mui/material/styles';
-import { FilmCardFront, FilmCardBack } from '.';
+import { FilmCardFront, FilmCardBack, FilmButton } from '.';
 import type { Film } from '~/graphql/gen/graphql';
 import type { CardColorKey } from '../../shared/styles/theme';
 import { FilmInfo } from '../../../static/films';
@@ -87,41 +87,6 @@ const SelectionTitle = styled('div')(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-const ContinueButtonWrapper = styled(Box)({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-end',
-});
-
-const ContinueButton = styled('button')(() => ({
-  width: 55,
-  height: 55,
-  padding: '26.8px 16.7px 26.2px 16px',
-  border: 'none',
-  background: 'transparent',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const ContinueEllipse = styled('div')(({ theme }) => ({
-  width: 55,
-  height: 55,
-  borderRadius: '50%',
-  border: `2px solid ${theme.palette.common.white}`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.common.white,
-}));
-
-const ContinueArrow = styled('div')(({ theme }) => ({
-  width: 22.3,
-  height: 2,
-  backgroundColor: theme.palette.common.white,
-}));
-
 export const FilmCard = ({
   baseInfo,
   film,
@@ -178,30 +143,7 @@ export const FilmCard = ({
           ) : (
             <SelectionSurface banner={banner}>
               <SelectionTitle>{accessibleTitle}</SelectionTitle>
-              <ContinueButtonWrapper>
-                <ContinueButton
-                  type="button"
-                  aria-label={
-                    isLoading
-                      ? `Loading ${accessibleTitle}`
-                      : `Select ${accessibleTitle}`
-                  }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    if (!isLoading) {
-                      onFlip();
-                    }
-                  }}
-                >
-                  <ContinueEllipse>
-                    {isLoading ? (
-                      <CircularProgress size={22} color="inherit" />
-                    ) : (
-                      <ContinueArrow />
-                    )}
-                  </ContinueEllipse>
-                </ContinueButton>
-              </ContinueButtonWrapper>
+              <FilmButton accessibleTitle onFlip isLoading />
             </SelectionSurface>
           )}
         </FrontFace>
