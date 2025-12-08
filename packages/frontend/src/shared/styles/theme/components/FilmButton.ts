@@ -1,5 +1,4 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, styled } from '@mui/material';
 
 const ContinueButtonWrapper = styled(Box)({
   width: '100%',
