@@ -143,7 +143,11 @@ export const FilmCard = ({
           ) : (
             <SelectionSurface banner={banner}>
               <SelectionTitle>{accessibleTitle}</SelectionTitle>
-              <FilmButton accessibleTitle onFlip isLoading />
+              <FilmButton
+                accessibleTitle={accessibleTitle}
+                onFlip={onFlip}
+                isLoading={isLoading}
+              />
             </SelectionSurface>
           )}
         </FrontFace>

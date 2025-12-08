@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { SnackBar } from '../../shared/components/SnackBar';
 import { FilmCard } from './components';
 import { useFilmData } from './hooks/useFilmData';
@@ -86,42 +86,76 @@ const Home = () => {
       >
         <Grid
           container
-          data-testid="home-grid-container"
+          data-testid="home-grid-parent-container"
           sx={{
             display: 'flex',
             height: '100%',
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
+            flexDirection: 'column',
           }}
         >
-          {FILMS.map((filmInfo) => {
-            const film = loadedFilms[filmInfo.id] ?? null;
-            const isFlipped = flippedCards[filmInfo.id] || false;
-            const isSelected = selectedCards[filmInfo.id] || false;
-            const isLoading = loadingFilmId === filmInfo.id;
+          <Grid
+            item
+            data-testid="home-grid-typography-item"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h1">Discover Studio Ghibli Films</Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                margin: 4,
+              }}
+            >
+              Select a film & hover to learn more
+            </Typography>
+          </Grid>
+          <Grid
+            container
+            item
+            data-testid="home-grid-films-container-item"
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'nowrap',
+            }}
+          >
+            {FILMS.map((filmInfo) => {
+              const film = loadedFilms[filmInfo.id] ?? null;
+              const isFlipped = flippedCards[filmInfo.id] || false;
+              const isSelected = selectedCards[filmInfo.id] || false;
+              const isLoading = loadingFilmId === filmInfo.id;
 
-            return (
-              <Grid
-                item
-                data-testid="home-grid-item"
-                key={filmInfo.id}
-                sx={{
-                  padding: 2,
-                }}
-              >
-                <FilmCard
-                  baseInfo={filmInfo}
-                  film={film}
-                  colorKey={filmInfo.cardColorKey}
-                  isSelected={isSelected}
-                  isFlipped={isFlipped}
-                  isLoading={isLoading}
-                  onFlip={() => handleCardFlip(filmInfo.id)}
-                />
-              </Grid>
-            );
-          })}
+              return (
+                <Grid
+                  item
+                  data-testid="home-grid-film-item"
+                  key={filmInfo.id}
+                  sx={{
+                    padding: 2,
+                  }}
+                >
+                  <FilmCard
+                    baseInfo={filmInfo}
+                    film={film}
+                    colorKey={filmInfo.cardColorKey}
+                    isSelected={isSelected}
+                    isFlipped={isFlipped}
+                    isLoading={isLoading}
+                    onFlip={() => handleCardFlip(filmInfo.id)}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
         </Grid>
       </Box>
 
