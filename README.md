@@ -4,22 +4,6 @@
 
 ## Getting Started
 
-### Prerequisites
-
-Ensure you have Node.js version 20.11 installed:
-
-```bash
-nvm install 20.11
-nvm use
-```
-
-The `.nvmrc` file in the root of this project will default to node 20.11 if you run `nvm use`.
-Confirm your Node.js version by running `node --version`.
-
-### Install pnpm
-
-This project uses pnpm for package management. Install it by following the [pnpm installation instructions](https://pnpm.io/installation).
-
 ### Setup Instructions
 
 1. **Clone the repository**:
@@ -84,56 +68,68 @@ This project uses pnpm for package management. Install it by following the [pnpm
 - `pnpm preview` - Preview production build
 - `pnpm test` - Run tests
 
-## GraphQL Code Generation
+## Project Overview
 
-This project uses GraphQL Code Generation with the client preset to create TypeScript types and typed GraphQL operations.
+Full stack Studio Ghibli demo built with:
 
-### Using Codegen
+- Frontend: React + TypeScript + Vite + Apollo Client
+- Backend: Node GraphQL server that proxies the public Studio Ghibli API
 
-1. **Write GraphQL operations** in TypeScript files within `src/graphql/queries/` or `src/graphql/mutations/` directories
-2. **Generate types and utilities**:
-   ```bash
-   cd packages/frontend
-   pnpm codegen
-   ```
-3. **Import and use the generated `gql` function** in your components:
+Core UX:
+-Landing view with a centered title and subtitle:
+Title: “Discover Studio Ghibli Films”
+Subtitle: “Select a film & hover to learn more”
 
-   ```typescript
-   import { GET_FILM } from '~/graphql/queries';
-   import { useQuery } from '@apollo/client';
+-A single responsive row of four film cards:
+Porco Rosso
+Kiki's Delivery Service
+Howl's Moving Castle
+My Neighbor Totoro
 
-   const { data, loading, error } = useQuery(GET_FILM);
-   ```
+-Default state:
+Card is rendered from static FilmInfo data (id, title, color key)
+Card shows only the film name and a custom circular arrow button
 
-### Codegen Configuration
+On select:
+-Click on the arrow triggers a GraphQL query for that specific film
+-Loading state is shown inside the circular button
+-When data returns, card becomes:
 
-The codegen configuration in `codegen.ts` uses:
+Front: poster image + title
+Back: hover or tap to flip and show banner, description, director, release date, runtime, and Rotten Tomatoes score
 
-- **Schema**: `../backend/schema.graphql` (local schema file)
-- **Documents**: `./src/graphql/mutations/*.ts` and `./src/graphql/queries/*.ts`
-- **Output**: `./src/graphql/gen/` (generated files directory)
-- **Preset**: `client` (provides type-safe GraphQL operations)
+Frontend and backend are decoupled but wired together through a typed GraphQL schema and codegen generated hooks.
 
-### File Structure
+### Dev-Tasks Process
 
-```
-src/graphql/
-├── gen/           # Generated files (do not edit)
-│   ├── gql.ts     # Generated gql function
-│   ├── graphql.ts # Generated types
-│   └── index.ts   # Exports
-├── queries/       # GraphQL query operations
-│   └── index.ts
-└── mutations/     # GraphQL mutation operations
-```
+This project follows the dev-tasks workflow described in .cursor/rules and implemented under /tasks.
 
-### Workflow
+- generated PRD
+- generated task list from PRD
+- used task list processer to complete and mark each task
 
-1. Write your GraphQL queries/mutations in TypeScript files under `src/graphql/queries/` or `src/graphql/mutations/`
-2. Run `pnpm codegen` to generate typed GraphQL utilities
-3. Import the `gql` function from `~/graphql/gen` and use it with your operations
-4. TypeScript will provide full type safety for your GraphQL operations
+### Time Spent
 
-## Development Workflow
+- Recommended 4 hours is a major underestimation.
+- Spent about 9-10 hours on cursor learning curve, backend, frontend, styling, manual testing
 
-This project follows the dev-tasks workflow. See `Studio_Ghibli_Take_Home_Challenge.md` for detailed development process requirements.
+### Rationale
+
+- abstracted customized styled components to share folder for cleanliness and readability
+- strict type assertion to catch bugs as soon as possible
+
+### Challenges
+
+- to complete an extensive list of requirements in a short amount of time
+- have never used cursor
+- selected vs hover logic
+- needed clarity on if the user can select more than one film
+
+### Limitations
+
+- in mock up, the movie title is bolded and added to the beginning of the movie description, but some movie descriptions didn't work like that (ie. Howls Moving Castle + its description)
+
+### Future Improvements:
+
+- improve type assertions on backend and in cursor that generates the frontend graphql logic from the backend schema
+- update backend schema's attribute keys to match ghibli API identically so we don't have to manipulate and match keys from API to backend
