@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
 import { SnackBar } from '../../shared/components/SnackBar';
 import { FilmCard } from './components';
 import { useFilmData } from './hooks/useFilmData';
 import { FILMS, FilmInfo } from '../../static/films';
 import type { Film } from '~/graphql/gen/graphql';
+import {
+  HomeContainer,
+  HomeBox,
+  HomeGridParent,
+  HeaderGridItem,
+  FilmsGridContainer,
+  FilmGridItem,
+  HomeTitle,
+  HomeSubtitle,
+} from '../../shared/styles/theme/components';
 
 const Home = () => {
   const {
@@ -62,71 +71,64 @@ const Home = () => {
   };
 
   return (
-    <Container
+    <HomeContainer
       data-testid="home-container"
-      maxWidth="xl"
-      sx={{
-        p: 4,
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-      }}
+      // maxWidth="xl"
+      // sx={{
+      //   p: 4,
+      //   display: 'flex',
+      //   height: '100%',
+      //   width: '100%',
+      // }}
     >
-      <Box
+      <HomeBox
         data-testid="home-box"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 3,
-          height: '100%',
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        // sx={{
+        //   display: 'flex',
+        //   flexDirection: 'row',
+        //   gap: 3,
+        //   height: '100%',
+        //   width: '100%',
+        //   justifyContent: 'center',
+        //   alignItems: 'center',
+        // }}
       >
-        <Grid
+        <HomeGridParent
           container
           data-testid="home-grid-parent-container"
-          sx={{
-            display: 'flex',
-            height: '100%',
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
+          // sx={{
+          //   display: 'flex',
+          //   height: '100%',
+          //   width: '100%',
+          //   justifyContent: 'center',
+          //   alignItems: 'center',
+          //   flexDirection: 'column',
+          // }}
         >
-          <Grid
+          <HeaderGridItem
             item
             data-testid="home-grid-typography-item"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            // sx={{
+            //   display: 'flex',
+            //   flexDirection: 'column',
+            //   justifyContent: 'center',
+            //   alignItems: 'center',
+            // }}
           >
-            <Typography variant="h1">Discover Studio Ghibli Films</Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                margin: 4,
-              }}
-            >
-              Select a film & hover to learn more
-            </Typography>
-          </Grid>
-          <Grid
+            <HomeTitle>Discover Studio Ghibli Films</HomeTitle>
+            <HomeSubtitle>Select a film & hover to learn more</HomeSubtitle>
+          </HeaderGridItem>
+          <FilmsGridContainer
             container
             item
             data-testid="home-grid-films-container-item"
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexWrap: 'nowrap',
-            }}
+            // sx={{
+            //   display: 'flex',
+            //   flexDirection: 'row',
+            //   justifyContent: 'center',
+            //   alignItems: 'center',
+            //   flexWrap: 'nowrap',
+            // }}
           >
             {FILMS.map((filmInfo) => {
               const film = loadedFilms[filmInfo.id] ?? null;
@@ -135,13 +137,10 @@ const Home = () => {
               const isLoading = loadingFilmId === filmInfo.id;
 
               return (
-                <Grid
+                <FilmGridItem
                   item
                   data-testid="home-grid-film-item"
                   key={filmInfo.id}
-                  sx={{
-                    padding: 2,
-                  }}
                 >
                   <FilmCard
                     baseInfo={filmInfo}
@@ -152,12 +151,12 @@ const Home = () => {
                     isLoading={isLoading}
                     onFlip={() => handleCardFlip(filmInfo.id)}
                   />
-                </Grid>
+                </FilmGridItem>
               );
             })}
-          </Grid>
-        </Grid>
-      </Box>
+          </FilmsGridContainer>
+        </HomeGridParent>
+      </HomeBox>
 
       <SnackBar
         open={showErrorSnackbar}
@@ -166,7 +165,7 @@ const Home = () => {
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
       />
-    </Container>
+    </HomeContainer>
   );
 };
 

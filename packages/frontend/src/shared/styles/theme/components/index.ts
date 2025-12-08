@@ -28,6 +28,17 @@ import {
   SelectionTitle,
 } from './FilmCard';
 
+import {
+  HomeContainer,
+  HomeBox,
+  HomeGridParent,
+  HeaderGridItem,
+  FilmsGridContainer,
+  FilmGridItem,
+  HomeTitle,
+  HomeSubtitle,
+} from './Home';
+
 export {
   ContinueButtonWrapper,
   ContinueButton,
@@ -51,4 +62,12 @@ export {
   BackFace,
   SelectionSurface,
   SelectionTitle,
+  HomeContainer,
+  HomeBox,
+  HomeGridParent,
+  HeaderGridItem,
+  FilmsGridContainer,
+  FilmGridItem,
+  HomeTitle,
+  HomeSubtitle,
 };
