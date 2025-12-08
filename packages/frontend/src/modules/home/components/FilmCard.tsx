@@ -1,4 +1,3 @@
-import { KeyboardEventHandler } from 'react';
 import { Box } from '@mui/material';
 import { styled, useTheme, type Theme } from '@mui/material/styles';
 import { FilmCardFront, FilmCardBack, FilmButton } from '.';
@@ -26,7 +25,7 @@ const CardWrapper = styled(Box)(({ theme }: Theme) => ({
   borderRadius: CARD_BORDER_RADIUS,
   boxShadow: '0 4px 24px rgba(0, 0, 0, 0.25)',
   border: `4px solid ${theme.palette.common.white}`,
-  cursor: 'pointer',
+  // cursor: 'pointer',
   overflow: 'hidden',
   position: 'relative',
 }));
@@ -102,23 +101,6 @@ export const FilmCard = ({
   const banner = film?.banner ?? '';
   const accessibleTitle = film?.title ?? baseInfo.title;
 
-  console.log({
-    baseInfo,
-    film,
-    isSelected,
-    isFlipped,
-    isLoading,
-    frontColor,
-    backColor,
-  });
-
-  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onFlip();
-    }
-  };
-
   const handleMouseEnter = () => {
     if (!isSelected || !film || isLoading) {
       return;
@@ -140,14 +122,8 @@ export const FilmCard = ({
   return (
     <CardWrapper
       data-testid="filmcard-wrapper"
-      // onClick={() => {
-      //   if (!isLoading) {
-      //     onFlip();
-      //   }
-      // }}
       role="button"
       tabIndex={0}
-      onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       aria-label={`${accessibleTitle} film card. ${
@@ -173,7 +149,7 @@ export const FilmCard = ({
         </FrontFace>
 
         <BackFace data-testid="filmcard-backface" bgColor={backColor}>
-          {isSelected && film && (
+          {isFlipped && isSelected && film && (
             <FilmCardBack data-testid="filmcard-backcardback" film={film} />
           )}
         </BackFace>

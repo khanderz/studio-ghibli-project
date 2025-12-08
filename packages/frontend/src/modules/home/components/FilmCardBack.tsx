@@ -1,25 +1,23 @@
 import { Box, Typography } from '@mui/material';
-import { styled, type Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import type { Film } from '~/graphql/gen/graphql';
+import tomatoIcon from '../../../../public/tomato.png';
 
-const CardContainer = styled(Box)(({ theme }: Theme) => ({
+const CardContainer = styled(Box)(() => ({
   width: '100%',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  backfaceVisibility: 'hidden',
-  WebkitBackfaceVisibility: 'hidden',
   position: 'absolute',
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  transform: 'rotateY(180deg)',
 }));
 
 const BannerContainer = styled(Box)({
   width: '100%',
-  height: '200px',
+  height: '115px',
   overflow: 'hidden',
   display: 'flex',
   alignItems: 'center',
@@ -28,7 +26,7 @@ const BannerContainer = styled(Box)({
 
 const BannerImage = styled('img')({
   width: '100%',
-  height: '100%',
+  height: '115px',
   objectFit: 'cover',
 });
 
@@ -37,49 +35,51 @@ const ContentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   display: 'flex',
   flexDirection: 'column',
-  gap: theme.spacing(1.5),
   overflowY: 'auto',
   backgroundColor: theme.palette.common.white,
 }));
 
 const InfoRow = styled(Box)({
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   gap: '4px',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 });
 
 const Label = styled(Typography)(({ theme }) => ({
   fontSize: '12px',
   fontWeight: 600,
   color: theme.palette.text.secondary,
-  textTransform: 'uppercase',
-  letterSpacing: '0.5px',
+  fontStyle: 'italic',
 }));
 
 const Value = styled(Typography)({
-  fontSize: '14px',
-  fontWeight: 400,
+  fontSize: '12px',
+  fontWeight: 700,
+  fontStyle: 'italic',
 });
 
 const Description = styled(Typography)(({ theme }) => ({
-  fontSize: '14px',
-  lineHeight: 1.6,
-  color: theme.palette.text.secondary,
-  marginTop: theme.spacing(1),
+  fontSize: '12px',
+  marginBottom: theme.spacing(1),
 }));
 
 function formatDate(date: Film['releaseDate']): Film['releaseDate'] {
   if (!date) {
     return 'N/A';
   }
-  if (typeof date === 'number') {
-    const d = new Date(date);
-    return d.getFullYear().toString();
+  const d = new Date(date);
+
+  if (Number.isNaN(d.getTime())) {
+    return 'N/A';
   }
-  if (date instanceof Date) {
-    return date.getFullYear().toString();
-  }
-  return String(date);
+
+  return d.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 function formatRuntime(minutes: Film['runningTime']): Film['runningTime'] {
@@ -96,6 +96,12 @@ function formatRtScore(score: Film['rtScore']): Film['rtScore'] {
   return `${score}%`;
 }
 
+const RtScoreImage = styled('img')({
+  width: '40px',
+  height: '40px',
+  objectFit: 'cover',
+});
+
 export const FilmCardBack = ({ film }: Film) => {
   return (
     <CardContainer>
@@ -105,20 +111,33 @@ export const FilmCardBack = ({ film }: Film) => {
       <ContentContainer>
         <Description variant="body2">{film.description}</Description>
         <InfoRow>
-          <Label>Director</Label>
-          <Value>{film.director}</Value>
-        </InfoRow>
-        <InfoRow>
-          <Label>Release Date</Label>
-          <Value>{formatDate(film.releaseDate)}</Value>
-        </InfoRow>
-        <InfoRow>
-          <Label>Runtime</Label>
+          <Label>Runtime:</Label>
           <Value>{formatRuntime(film.runningTime)}</Value>
         </InfoRow>
         <InfoRow>
-          <Label>Rotten Tomatoes Score</Label>
-          <Value>{formatRtScore(film.rtScore)}</Value>
+          <Label>Director:</Label>
+          <Value>{film.director}</Value>
+        </InfoRow>
+        <InfoRow>
+          <Label>Release Date:</Label>
+          <Value>{formatDate(film.releaseDate)}</Value>
+        </InfoRow>
+
+        <InfoRow
+          sx={{
+            marginTop: 'auto',
+          }}
+        >
+          <RtScoreImage src={tomatoIcon} />
+          <Typography
+            sx={{
+              fontSize: '40px',
+              fontWeight: 600,
+              marginLeft: 2,
+            }}
+          >
+            {formatRtScore(film.rtScore)}
+          </Typography>
         </InfoRow>
       </ContentContainer>
     </CardContainer>
