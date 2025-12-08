@@ -25,7 +25,6 @@ const CardWrapper = styled(Box)(({ theme }: Theme) => ({
   borderRadius: CARD_BORDER_RADIUS,
   boxShadow: '0 4px 24px rgba(0, 0, 0, 0.25)',
   border: `4px solid ${theme.palette.common.white}`,
-  // cursor: 'pointer',
   overflow: 'hidden',
   position: 'relative',
 }));

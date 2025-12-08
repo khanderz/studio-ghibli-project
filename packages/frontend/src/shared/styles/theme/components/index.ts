@@ -1,5 +1,13 @@
-import { MuiButton } from './button';
+import {
+  ContinueButtonWrapper,
+  ContinueButton,
+  ContinueEllipse,
+  ContinueArrow,
+} from './FilmButton';
 
-export const components = {
-  MuiButton,
+export {
+  ContinueButtonWrapper,
+  ContinueButton,
+  ContinueEllipse,
+  ContinueArrow,
 };
