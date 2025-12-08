@@ -119,17 +119,37 @@ export const FilmCard = ({
     }
   };
 
+  const handleMouseEnter = () => {
+    if (!isSelected || !film || isLoading) {
+      return;
+    }
+    if (!isFlipped) {
+      onFlip();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isSelected || !film || isLoading) {
+      return;
+    }
+    if (isFlipped) {
+      onFlip();
+    }
+  };
+
   return (
     <CardWrapper
       data-testid="filmcard-wrapper"
-      onClick={() => {
-        if (!isLoading) {
-          onFlip();
-        }
-      }}
+      // onClick={() => {
+      //   if (!isLoading) {
+      //     onFlip();
+      //   }
+      // }}
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       aria-label={`${accessibleTitle} film card. ${
         isFlipped ? 'Showing details.' : 'Showing poster.'
       } Press Enter or Space to ${isFlipped ? 'show poster' : 'show details'}.`}
@@ -153,7 +173,7 @@ export const FilmCard = ({
         </FrontFace>
 
         <BackFace data-testid="filmcard-backface" bgColor={backColor}>
-          {film && (
+          {isSelected && film && (
             <FilmCardBack data-testid="filmcard-backcardback" film={film} />
           )}
         </BackFace>
